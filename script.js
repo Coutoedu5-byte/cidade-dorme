@@ -9,6 +9,7 @@ function createRoom() {
         document.getElementById("playerName").value;
 
     if (!playerName) {
+
         alert("Digite seu nome");
         return;
     }
@@ -22,6 +23,7 @@ function joinRoom() {
         document.getElementById("playerName").value;
 
     if (!playerName) {
+
         alert("Digite seu nome");
         return;
     }
@@ -92,57 +94,66 @@ socket.on("errorMessage", (msg) => {
 
 function startGame(){
 
-    alert("Partida iniciada!");
-
     document.getElementById("roleScreen")
         .classList.remove("hidden");
 
-    // CARTAS
+    const roleTitle =
+        document.getElementById("roleTitle");
+
+    const roleDescription =
+        document.getElementById("roleDescription");
+
+    const roleImage =
+        document.getElementById("roleImage");
+
+    // LISTA DE CARTAS
     const roles = [
 
         {
             nome: "ASSASSINO",
-            imagem: "/assassino.png.PNG",
-            descricao: "Elimine todos sem ser descoberto."
+            imagem: "/public/assassino.png.PNG",
+            descricao:
+            "Elimine todos sem ser descoberto."
         },
 
         {
             nome: "DETETIVE",
-            imagem: "/detetive.png.PNG",
-            descricao: "Descubra quem é o assassino."
+            imagem: "/public/detetive.png.PNG",
+            descricao:
+            "Descubra quem é o assassino."
         },
 
         {
             nome: "MÉDICO",
-            imagem: "/medico.png.PNG",
-            descricao: "Salve jogadores durante a noite."
+            imagem: "/public/medico.png.PNG",
+            descricao:
+            "Salve um jogador por noite."
         },
 
         {
             nome: "CIDADÃO",
-            imagem: "/cidadão.png.PNG",
-            descricao: "Encontre o assassino."
+            imagem: "/public/cidadão.png.PNG",
+            descricao:
+            "Encontre o assassino."
         }
 
     ];
 
-    // SORTEIA CARTA
+    // SORTEIA UMA CARTA
     const randomRole =
         roles[Math.floor(Math.random() * roles.length)];
 
-    // TÍTULO
-    document.getElementById("roleTitle")
-        .innerText = randomRole.nome;
+    // MOSTRA NOME
+    roleTitle.innerText =
+        randomRole.nome;
 
-    // DESCRIÇÃO
-    document.getElementById("roleDescription")
-        .innerText = randomRole.descricao;
+    // MOSTRA DESCRIÇÃO
+    roleDescription.innerText =
+        randomRole.descricao;
 
-    // IMAGEM
-    const roleImage =
-        document.getElementById("roleImage");
-
-    roleImage.src = randomRole.imagem;
+    // MOSTRA IMAGEM
+    roleImage.src =
+        randomRole.imagem;
 }
 
 function closeRole(){
