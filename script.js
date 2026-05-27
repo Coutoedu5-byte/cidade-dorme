@@ -2,6 +2,7 @@ const socket = io();
 
 let playerName = "";
 let roomCode = "";
+let isHost = false;
 
 /* CRIAR SALA */
 function createRoom() {
@@ -44,6 +45,8 @@ function joinRoom() {
 /* SALA CRIADA */
 socket.on("roomCreated", (code) => {
 
+    isHost = true;
+
     roomCode = code;
 
     document.getElementById("menuScreen")
@@ -62,8 +65,19 @@ socket.on("roomJoined", () => {
     document.getElementById("menuScreen")
         .classList.add("hidden");
 
-    document.getElementById("lobbyScreen")
-        .classList.remove("hidden");
+    /* CRIADOR */
+    if(isHost){
+
+        document.getElementById("lobbyScreen")
+            .classList.remove("hidden");
+    }
+
+    /* JOGADOR */
+    else{
+
+        document.getElementById("waitingScreen")
+            .classList.remove("hidden");
+    }
 });
 
 /* ATUALIZA JOGADORES */
@@ -105,6 +119,14 @@ function startGame(){
 /* RECEBER CARGO */
 socket.on("receiveRole", (role) => {
 
+    /* ESCONDE TELAS */
+    document.getElementById("waitingScreen")
+        .classList.add("hidden");
+
+    document.getElementById("lobbyScreen")
+        .classList.add("hidden");
+
+    /* MOSTRA CARTA */
     document.getElementById("roleScreen")
         .classList.remove("hidden");
 
