@@ -2,32 +2,58 @@ const socket = io();
 
 let playerName = "";
 let roomCode = "";
-let isHost = false;
+
+/* ELEMENTOS */
+const menuScreen =
+    document.getElementById("menuScreen");
+
+const lobbyScreen =
+    document.getElementById("lobbyScreen");
+
+const waitingScreen =
+    document.getElementById("waitingScreen");
+
+const roleScreen =
+    document.getElementById("roleScreen");
+
+/* MOSTRAR TELA */
+function showScreen(screen){
+
+    /* ESCONDE TODAS */
+    menuScreen.classList.add("hidden");
+    lobbyScreen.classList.add("hidden");
+    waitingScreen.classList.add("hidden");
+    roleScreen.classList.add("hidden");
+
+    /* MOSTRA A CERTA */
+    screen.classList.remove("hidden");
+}
 
 /* CRIAR SALA */
-function createRoom() {
+function createRoom(){
 
     playerName =
         document.getElementById("playerName").value;
 
-    if (!playerName) {
+    if(!playerName){
 
         alert("Digite seu nome");
         return;
     }
 
-    isHost = true;
-
-    socket.emit("createRoom", playerName);
+    socket.emit(
+        "createRoom",
+        playerName
+    );
 }
 
 /* ENTRAR SALA */
-function joinRoom() {
+function joinRoom(){
 
     playerName =
         document.getElementById("playerName").value;
 
-    if (!playerName) {
+    if(!playerName){
 
         alert("Digite seu nome");
         return;
@@ -36,11 +62,10 @@ function joinRoom() {
     roomCode =
         prompt("Digite o código da sala");
 
-    if (!roomCode) return;
-
-    isHost = false;
+    if(!roomCode) return;
 
     socket.emit("joinRoom", {
+
         roomCode,
         playerName
     });
@@ -51,20 +76,10 @@ socket.on("roomCreated", (code) => {
 
     roomCode = code;
 
-    /* ESCONDE MENU */
-    document.getElementById("menuScreen")
-        .classList.add("hidden");
-
-    /* ESCONDE ESPERA */
-    document.getElementById("waitingScreen")
-        .classList.add("hidden");
-
-    /* MOSTRA LOBBY */
-    document.getElementById("lobbyScreen")
-        .classList.remove("hidden");
-
     document.getElementById("roomCode")
         .innerText = code;
+
+    showScreen(lobbyScreen);
 });
 
 /* ENTROU NA SALA */
@@ -72,21 +87,11 @@ socket.on("roomJoined", (code) => {
 
     roomCode = code;
 
-    /* ESCONDE MENU */
-    document.getElementById("menuScreen")
-        .classList.add("hidden");
-
-    /* ESCONDE LOBBY */
-    document.getElementById("lobbyScreen")
-        .classList.add("hidden");
-
-    /* MOSTRA ESPERA */
-    document.getElementById("waitingScreen")
-        .classList.remove("hidden");
+    showScreen(waitingScreen);
 });
 
 /* ATUALIZA JOGADORES */
-function updatePlayers(players){
+socket.on("updatePlayers", (players) => {
 
     const playersList =
         document.getElementById("players");
@@ -102,11 +107,6 @@ function updatePlayers(players){
 
         playersList.appendChild(li);
     });
-}
-
-socket.on("updatePlayers", (players) => {
-
-    updatePlayers(players);
 });
 
 /* ERRO */
@@ -124,17 +124,7 @@ function startGame(){
 /* RECEBER CARGO */
 socket.on("receiveRole", (role) => {
 
-    /* ESCONDE ESPERA */
-    document.getElementById("waitingScreen")
-        .classList.add("hidden");
-
-    /* ESCONDE LOBBY */
-    document.getElementById("lobbyScreen")
-        .classList.add("hidden");
-
-    /* MOSTRA CARTA */
-    document.getElementById("roleScreen")
-        .classList.remove("hidden");
+    showScreen(roleScreen);
 
     const roleTitle =
         document.getElementById("roleTitle");
@@ -201,6 +191,5 @@ socket.on("receiveRole", (role) => {
 /* FECHAR CARTA */
 function closeRole(){
 
-    document.getElementById("roleScreen")
-        .classList.add("hidden");
+    roleScreen.classList.add("hidden");
 }
