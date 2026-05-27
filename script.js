@@ -57,3 +57,6 @@ socket.on("roomJoined", (players) => {
 socket.on("errorMessage", (msg) => {
     alert(msg);
 });
+function startGame(){
+    alert("Partida iniciada!");
+}
