@@ -49,9 +49,11 @@ socket.on("roomCreated", (code) => {
 
     roomCode = code;
 
+    /* ESCONDE MENU */
     document.getElementById("menuScreen")
         .classList.add("hidden");
 
+    /* MOSTRA LOBBY */
     document.getElementById("lobbyScreen")
         .classList.remove("hidden");
 
@@ -62,22 +64,17 @@ socket.on("roomCreated", (code) => {
 /* ENTROU NA SALA */
 socket.on("roomJoined", () => {
 
+    /* ESCONDE MENU */
     document.getElementById("menuScreen")
         .classList.add("hidden");
 
-    /* CRIADOR */
-    if(isHost){
+    /* ESCONDE LOBBY */
+    document.getElementById("lobbyScreen")
+        .classList.add("hidden");
 
-        document.getElementById("lobbyScreen")
-            .classList.remove("hidden");
-    }
-
-    /* JOGADOR */
-    else{
-
-        document.getElementById("waitingScreen")
-            .classList.remove("hidden");
-    }
+    /* MOSTRA ESPERA */
+    document.getElementById("waitingScreen")
+        .classList.remove("hidden");
 });
 
 /* ATUALIZA JOGADORES */
@@ -119,10 +116,11 @@ function startGame(){
 /* RECEBER CARGO */
 socket.on("receiveRole", (role) => {
 
-    /* ESCONDE TELAS */
+    /* ESCONDE ESPERA */
     document.getElementById("waitingScreen")
         .classList.add("hidden");
 
+    /* ESCONDE LOBBY */
     document.getElementById("lobbyScreen")
         .classList.add("hidden");
 
