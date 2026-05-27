@@ -55,8 +55,18 @@ io.on("connection", (socket) => {
 
         socket.roomCode = code;
 
+        /* CRIOU SALA */
         io.to(socket.id)
             .emit("roomCreated", code);
+
+        /* ATUALIZA JOGADORES */
+        io.to(code)
+            .emit(
+                "updatePlayers",
+                rooms[code].players.map(
+                    p => p.name
+                )
+            );
     });
 
     /* ENTRAR SALA */
@@ -85,6 +95,7 @@ io.on("connection", (socket) => {
 
         socket.roomCode = roomCode;
 
+        /* ATUALIZA TODOS */
         io.to(roomCode)
             .emit(
                 "updatePlayers",
