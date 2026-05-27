@@ -1,145 +1,197 @@
-
 const socket = io();
 
-let currentRoom = "";
-let currentRole = "";
+let playerName = "";
+let roomCode = "";
 let isDead = false;
 
-function createRoom(){
-const name = document.getElementById("playerName").value;
+const app = document.getElementById("app");
 
-if(!name) return alert("Digite seu nome");
+function createHome() {
+    app.innerHTML = `
+        <div class="home">
+            <h1>CIDADE<br>DORME</h1>
 
-socket.emit("createRoom",name);
+            <input id="nameInput" placeholder="Nome do jogador">
+
+            <div class="buttons">
+                <button onclick="createRoom()">Criar Sala</button>
+                <button onclick="joinRoom()">Entrar Sala</button>
+            </div>
+        </div>
+    `;
 }
 
-function joinRoom(){
-const room = prompt("Digite o código da sala");
-const name = document.getElementById("playerName").value;
+createHome();
 
-socket.emit("joinRoom",{room,name});
+function createRoom() {
+    playerName = document.getElementById("nameInput").value;
+
+    if (!playerName) {
+        alert("Digite seu nome");
+        return;
+    }
+
+    socket.emit("createRoom", playerName);
 }
 
-socket.on("roomCreated",(room)=>{
-currentRoom = room;
+function joinRoom() {
+    playerName = document.getElementById("nameInput").value;
 
-document.getElementById("menuScreen").classList.add("hidden");
-document.getElementById("lobbyScreen").classList.remove("hidden");
+    if (!playerName) {
+        alert("Digite seu nome");
+        return;
+    }
 
-document.getElementById("roomCode").innerText = room;
-});
+    const code = prompt("Digite o código da sala");
 
-socket.on("updatePlayers",(players)=>{
+    if (!code) return;
 
-const ul = document.getElementById("players");
-ul.innerHTML = "";
-
-const voteArea = document.getElementById("votePlayers");
-voteArea.innerHTML = "";
-
-players.forEach(player=>{
-
-const li = document.createElement("li");
-li.innerText = player.name + (player.dead ? " 💀":"");
-ul.appendChild(li);
-
-if(!player.dead){
-const div = document.createElement("div");
-div.className = "player-card";
-
-div.innerHTML = `
-<h3>${player.name}</h3>
-<button class="vote-btn" onclick="votePlayer('${player.id}')">Votar</button>
-`;
-
-voteArea.appendChild(div);
+    socket.emit("joinRoom", {
+        room: code,
+        name: playerName
+    });
 }
 
-});
+socket.on("roomCreated", (room) => {
+    roomCode = room;
+    renderLobby([]);
 });
 
-function startGame(){
-socket.emit("startGame",currentRoom);
+socket.on("roomJoined", (data) => {
+    roomCode = data.room;
+    renderLobby(data.players);
+});
+
+socket.on("updatePlayers", (players) => {
+    updatePlayerList(players);
+});
+
+function renderLobby(players) {
+    app.innerHTML = `
+        <div class="lobby">
+            <h2>Sala: ${roomCode}</h2>
+
+            <div id="players"></div>
+
+            <button onclick="startGame()">Iniciar Partida</button>
+
+            <div id="chat"></div>
+
+            <input id="chatInput" placeholder="Mensagem">
+            <button onclick="sendMessage()">Enviar</button>
+        </div>
+    `;
+
+    updatePlayerList(players);
 }
 
-socket.on("roleAssigned",(role)=>{
+function updatePlayerList(players) {
+    const div = document.getElementById("players");
 
-currentRole = role.name;
-
-document.getElementById("roleScreen").classList.remove("hidden");
-
-document.getElementById("roleTitle").innerText = role.name;
-document.getElementById("roleDescription").innerText = role.description;
-});
-
-function closeRole(){
-document.getElementById("roleScreen").classList.add("hidden");
+    div.innerHTML = `
+        <h3>Jogadores</h3>
+        ${players.map(p => `
+            <div>${p.name} ${p.dead ? "☠️" : ""}</div>
+        `).join("")}
+    `;
 }
 
-socket.on("nightPhase",(data)=>{
-
-document.getElementById("nightScreen").classList.remove("hidden");
-
-const actions = document.getElementById("nightActions");
-actions.innerHTML = "";
-
-if(data.role === "Assassino"){
-actions.innerHTML = "<p>Escolha alguém para eliminar.</p>";
+function startGame() {
+    socket.emit("startGame", roomCode);
 }
 
-if(data.role === "Médico"){
-actions.innerHTML = "<p>Escolha alguém para salvar.</p>";
+socket.on("role", (role) => {
+    showRole(role);
+});
+
+function showRole(role) {
+
+    let color = "#fff";
+
+    if(role === "Assassino") color = "red";
+    if(role === "Detetive") color = "skyblue";
+    if(role === "Médico") color = "lime";
+
+    app.innerHTML = `
+        <div class="roleScreen">
+            <h1 style="color:${color}">${role}</h1>
+
+            <button onclick="backToLobby()">Continuar</button>
+        </div>
+    `;
 }
 
-if(data.role === "Detetive"){
-actions.innerHTML = "<p>Escolha alguém para investigar.</p>";
-}
-});
-
-socket.on("dayPhase",()=>{
-document.getElementById("nightScreen").classList.add("hidden");
-document.getElementById("dayScreen").classList.remove("hidden");
-});
-
-function sendMessage(){
-
-if(isDead) return alert("Mortos não podem conversar.");
-
-const input = document.getElementById("messageInput");
-
-socket.emit("sendMessage",{
-room:currentRoom,
-message:input.value
-});
-
-input.value = "";
+function backToLobby() {
+    renderLobby([]);
 }
 
-socket.on("receiveMessage",(data)=>{
-const div = document.createElement("div");
-div.innerText = data.player + ": " + data.message;
+function sendMessage() {
 
-document.getElementById("messages").appendChild(div);
-});
+    if(isDead) {
+        alert("Jogadores mortos não podem falar.");
+        return;
+    }
 
-function votePlayer(target){
-socket.emit("votePlayer",{
-room:currentRoom,
-target
-});
+    const input = document.getElementById("chatInput");
+
+    socket.emit("chat", {
+        room: roomCode,
+        player: playerName,
+        message: input.value
+    });
+
+    input.value = "";
 }
 
-socket.on("eliminated",(id)=>{
+socket.on("chat", (data) => {
 
-if(socket.id === id){
-isDead = true;
+    const chat = document.getElementById("chat");
 
-document.getElementById("eliminatedScreen").classList.remove("hidden");
+    if(!chat) return;
+
+    chat.innerHTML += `
+        <div>
+            <b>${data.player}:</b> ${data.message}
+        </div>
+    `;
+});
+
+socket.on("playerEliminated", (player) => {
+
+    if(player === playerName) {
+
+        isDead = true;
+
+        app.innerHTML = `
+            <div class="deathScreen">
+                <h1>VOCÊ MORREU ☠️</h1>
+
+                <button onclick="backToLobby()">
+                    Assistir Partida
+                </button>
+            </div>
+        `;
+    }
+});
+
+socket.on("voting", (players) => {
+
+    app.innerHTML = `
+        <div class="voting">
+            <h1>VOTAÇÃO</h1>
+
+            ${players.map(p => `
+                <button onclick="votePlayer('${p.name}')">
+                    ${p.name}
+                </button>
+            `).join("")}
+        </div>
+    `;
+});
+
+function votePlayer(name) {
+    socket.emit("vote", {
+        room: roomCode,
+        target: name
+    });
 }
-});
-
-socket.on("winner",(text)=>{
-document.getElementById("winnerScreen").classList.remove("hidden");
-
-document.getElementById("winnerText").innerText = text;
-});
