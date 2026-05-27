@@ -217,3 +217,19 @@ margin-top:300px;
 }
 
 }
+/* TELA DE ESPERA */
+#waitingScreen{
+
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+}
+
+.waiting-image{
+
+width:100%;
+max-width:500px;
+display:block;
+margin:auto;
+}
