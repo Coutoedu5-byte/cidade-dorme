@@ -91,19 +91,20 @@ io.on("connection", (socket) => {
             return;
         }
 
+        /* ENTRA NA SALA */
+        socket.join(roomCode);
+
+        socket.roomCode = roomCode;
+
         /* ADICIONA JOGADOR */
         rooms[roomCode].players.push({
             id: socket.id,
             name: playerName
         });
 
-        socket.join(roomCode);
-
-        socket.roomCode = roomCode;
-
         /* AVISA O JOGADOR */
         io.to(socket.id)
-            .emit("roomJoined");
+            .emit("roomJoined", roomCode);
 
         /* ATUALIZA TODOS */
         io.to(roomCode)
