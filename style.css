@@ -23,11 +23,18 @@ max-width:1100px;
 margin:auto;
 padding:20px;
 text-align:center;
+position:relative;
+z-index:1;
 }
 
 /* REMOVE TEXTO */
 .logo{
 display:none;
+}
+
+/* ESCONDER */
+.hidden{
+display:none !important;
 }
 
 /* MENU CENTRALIZADO */
@@ -199,13 +206,17 @@ left:0;
 width:100%;
 height:100vh;
 
-display:flex;
 justify-content:center;
 align-items:center;
 
 z-index:9999;
 
 background:transparent;
+}
+
+/* MOSTRAR SOMENTE QUANDO NÃO ESTIVER HIDDEN */
+#waitingScreen:not(.hidden){
+display:flex;
 }
 
 /* IMAGEM ESPERA */
@@ -216,11 +227,6 @@ max-width:500px;
 
 display:block;
 margin:auto;
-}
-
-/* ESCONDER */
-.hidden{
-display:none !important;
 }
 
 /* RESPONSIVO */
