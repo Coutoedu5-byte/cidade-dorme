@@ -12,11 +12,12 @@ background-attachment:fixed;
 min-height:100vh;
 }
 
-/* REMOVIDO O FUNDO ANTIGO */
+/* REMOVE FUNDO ANTIGO */
 .background{
 display:none;
 }
 
+/* CONTAINER */
 .container{
 max-width:1100px;
 margin:auto;
@@ -24,12 +25,17 @@ padding:20px;
 text-align:center;
 }
 
-/* LOGO */
+/* REMOVE TEXTO AMARELO */
 .logo{
-font-size:70px;
-color:orange;
-margin-bottom:30px;
-text-shadow:0 0 15px rgba(0,0,0,0.8);
+display:none;
+}
+
+/* IMAGEM CENTRAL */
+.main-image{
+width:320px;
+max-width:90%;
+margin:20px auto;
+display:block;
 }
 
 /* INPUTS */
@@ -41,7 +47,8 @@ width:300px;
 max-width:90%;
 font-size:18px;
 margin:10px;
-background:rgba(255,255,255,0.9);
+background:rgba(255,255,255,0.92);
+color:#000;
 }
 
 /* BOTÕES */
@@ -60,6 +67,7 @@ button:hover{
 transform:scale(1.03);
 }
 
+/* BOTÕES PRINCIPAIS */
 .buttons button:nth-child(1){
 background:green;
 color:white;
@@ -108,7 +116,7 @@ margin-bottom:10px;
 padding-right:5px;
 }
 
-/* CARTÕES DOS JOGADORES */
+/* CARTÕES */
 .player-card{
 background:rgba(255,255,255,0.1);
 padding:15px;
@@ -120,7 +128,7 @@ backdrop-filter:blur(4px);
 box-shadow:0 0 12px rgba(0,0,0,0.4);
 }
 
-/* BOTÃO DE VOTO */
+/* BOTÃO VOTAR */
 .vote-btn{
 background:crimson;
 color:white;
@@ -155,8 +163,8 @@ box-shadow:0 0 15px rgba(255,152,0,0.5);
 /* RESPONSIVO */
 @media(max-width:700px){
 
-.logo{
-font-size:48px;
+.main-image{
+width:250px;
 }
 
 .player-card{
@@ -164,6 +172,10 @@ width:90%;
 }
 
 button{
+width:90%;
+}
+
+input{
 width:90%;
 }
 
