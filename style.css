@@ -2,7 +2,7 @@ body{
 margin:0;
 font-family:Arial;
 color:white;
-overflow-x:hidden;
+overflow:hidden;
 
 background-image:url('/background.png.PNG');
 background-size:cover;
@@ -27,24 +27,19 @@ position:relative;
 z-index:1;
 }
 
-/* REMOVE TEXTO */
-.logo{
-display:none;
-}
-
 /* ESCONDER */
 .hidden{
 display:none !important;
 }
 
-/* MENU CENTRALIZADO */
+/* MENU */
 #menuScreen{
+
+min-height:100vh;
 
 flex-direction:column;
 justify-content:center;
 align-items:center;
-
-min-height:100vh;
 }
 
 /* MENU VISÍVEL */
@@ -52,11 +47,52 @@ min-height:100vh;
 display:flex;
 }
 
+/* LOBBY */
+#lobbyScreen{
+padding-top:80px;
+}
+
+/* LOBBY VISÍVEL */
+#lobbyScreen:not(.hidden){
+display:block;
+}
+
+/* TELA DE ESPERA */
+#waitingScreen{
+
+position:fixed;
+
+top:0;
+left:0;
+
+width:100%;
+height:100vh;
+
+z-index:99999;
+
+justify-content:center;
+align-items:center;
+
+background:rgba(0,0,0,0.4);
+}
+
+/* ESPERA VISÍVEL */
+#waitingScreen:not(.hidden){
+display:flex;
+}
+
+/* IMAGEM ESPERA */
+.waiting-image{
+width:100%;
+max-width:500px;
+display:block;
+}
+
 /* IMAGEM CENTRAL */
 .main-image{
 width:320px;
 max-width:90%;
-margin:20px auto;
+margin-bottom:20px;
 display:block;
 }
 
@@ -70,7 +106,7 @@ border-radius:20px;
 box-shadow:0 0 25px rgba(0,0,0,0.7);
 }
 
-/* INPUTS */
+/* INPUT */
 input{
 padding:15px;
 border:none;
@@ -82,7 +118,7 @@ font-size:18px;
 margin-top:20px;
 margin-bottom:20px;
 
-background:rgba(255,255,255,0.92);
+background:rgba(255,255,255,0.95);
 color:#000;
 }
 
@@ -102,12 +138,12 @@ button:hover{
 transform:scale(1.03);
 }
 
-/* BOTÕES PRINCIPAIS */
+/* BOTÕES MENU */
 .buttons{
-margin-top:20px;
 display:flex;
 flex-direction:column;
 align-items:center;
+width:100%;
 }
 
 .buttons button:nth-child(1){
@@ -120,8 +156,9 @@ background:#008cff;
 color:white;
 }
 
+/* START */
 .start-btn{
-background:orange;
+background:#ff9800;
 color:white;
 }
 
@@ -145,6 +182,7 @@ margin-top:20px;
 box-shadow:0 0 20px rgba(0,0,0,0.5);
 }
 
+/* MENSAGENS */
 #messages{
 height:200px;
 overflow-y:auto;
@@ -153,7 +191,7 @@ margin-bottom:10px;
 padding-right:5px;
 }
 
-/* CARTÕES */
+/* PLAYER CARD */
 .player-card{
 background:rgba(255,255,255,0.1);
 padding:15px;
@@ -185,7 +223,7 @@ backdrop-filter:blur(8px);
 box-shadow:0 0 25px rgba(0,0,0,0.6);
 }
 
-/* BOTÃO INICIAR */
+/* BOTÃO START */
 #startGameBtn{
 width:100%;
 padding:18px;
@@ -197,40 +235,6 @@ border-radius:16px;
 margin-top:20px;
 font-weight:bold;
 box-shadow:0 0 15px rgba(255,152,0,0.5);
-}
-
-/* TELA DE ESPERA */
-#waitingScreen{
-
-position:fixed;
-
-top:0;
-left:0;
-
-width:100%;
-height:100vh;
-
-justify-content:center;
-align-items:center;
-
-z-index:9999;
-
-background:transparent;
-}
-
-/* ESPERA VISÍVEL */
-#waitingScreen:not(.hidden){
-display:flex;
-}
-
-/* IMAGEM ESPERA */
-.waiting-image{
-
-width:100%;
-max-width:500px;
-
-display:block;
-margin:auto;
 }
 
 /* RESPONSIVO */
@@ -258,6 +262,10 @@ width:90%;
 
 .buttons{
 width:100%;
+}
+
+.waiting-image{
+max-width:90%;
 }
 
 }
