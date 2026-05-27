@@ -16,6 +16,8 @@ function createRoom() {
         return;
     }
 
+    isHost = true;
+
     socket.emit("createRoom", playerName);
 }
 
@@ -36,6 +38,8 @@ function joinRoom() {
 
     if (!roomCode) return;
 
+    isHost = false;
+
     socket.emit("joinRoom", {
         roomCode,
         playerName
@@ -45,12 +49,14 @@ function joinRoom() {
 /* SALA CRIADA */
 socket.on("roomCreated", (code) => {
 
-    isHost = true;
-
     roomCode = code;
 
     /* ESCONDE MENU */
     document.getElementById("menuScreen")
+        .classList.add("hidden");
+
+    /* ESCONDE ESPERA */
+    document.getElementById("waitingScreen")
         .classList.add("hidden");
 
     /* MOSTRA LOBBY */
@@ -68,13 +74,25 @@ socket.on("roomJoined", () => {
     document.getElementById("menuScreen")
         .classList.add("hidden");
 
-    /* ESCONDE LOBBY */
-    document.getElementById("lobbyScreen")
-        .classList.add("hidden");
+    /* HOST */
+    if(isHost){
 
-    /* MOSTRA ESPERA */
-    document.getElementById("waitingScreen")
-        .classList.remove("hidden");
+        document.getElementById("waitingScreen")
+            .classList.add("hidden");
+
+        document.getElementById("lobbyScreen")
+            .classList.remove("hidden");
+    }
+
+    /* JOGADOR */
+    else{
+
+        document.getElementById("lobbyScreen")
+            .classList.add("hidden");
+
+        document.getElementById("waitingScreen")
+            .classList.remove("hidden");
+    }
 });
 
 /* ATUALIZA JOGADORES */
