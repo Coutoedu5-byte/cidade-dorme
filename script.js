@@ -3,6 +3,7 @@ const socket = io();
 let playerName = "";
 let roomCode = "";
 
+/* CRIAR SALA */
 function createRoom() {
 
     playerName =
@@ -17,6 +18,7 @@ function createRoom() {
     socket.emit("createRoom", playerName);
 }
 
+/* ENTRAR SALA */
 function joinRoom() {
 
     playerName =
@@ -39,6 +41,7 @@ function joinRoom() {
     });
 }
 
+/* SALA CRIADA */
 socket.on("roomCreated", (code) => {
 
     roomCode = code;
@@ -51,21 +54,19 @@ socket.on("roomCreated", (code) => {
 
     document.getElementById("roomCode")
         .innerText = code;
-
-    updatePlayers([playerName]);
 });
 
-socket.on("roomJoined", (players) => {
+/* ENTROU NA SALA */
+socket.on("roomJoined", () => {
 
     document.getElementById("menuScreen")
         .classList.add("hidden");
 
     document.getElementById("lobbyScreen")
         .classList.remove("hidden");
-
-    updatePlayers(players);
 });
 
+/* ATUALIZA JOGADORES */
 function updatePlayers(players){
 
     const playersList =
@@ -85,14 +86,24 @@ function updatePlayers(players){
 }
 
 socket.on("updatePlayers", (players) => {
+
     updatePlayers(players);
 });
 
+/* ERRO */
 socket.on("errorMessage", (msg) => {
+
     alert(msg);
 });
 
+/* INICIAR PARTIDA */
 function startGame(){
+
+    socket.emit("startGame");
+}
+
+/* RECEBER CARGO */
+socket.on("receiveRole", (role) => {
 
     document.getElementById("roleScreen")
         .classList.remove("hidden");
@@ -106,56 +117,60 @@ function startGame(){
     const roleImage =
         document.getElementById("roleImage");
 
-    // LISTA DE CARTAS
-    const roles = [
+    /* ASSASSINO */
+    if(role === "assassino"){
 
-        {
-            nome: "ASSASSINO",
-            imagem: "/public/assassino.png.PNG",
-            descricao:
-            "Elimine todos sem ser descoberto."
-        },
+        roleTitle.innerText =
+            "ASSASSINO";
 
-        {
-            nome: "DETETIVE",
-            imagem: "/public/detetive.png.PNG",
-            descricao:
-            "Descubra quem é o assassino."
-        },
+        roleDescription.innerText =
+            "Elimine todos sem ser descoberto.";
 
-        {
-            nome: "MÉDICO",
-            imagem: "/public/medico.png.PNG",
-            descricao:
-            "Salve um jogador por noite."
-        },
+        roleImage.src =
+            "/assassino.png";
+    }
 
-        {
-            nome: "CIDADÃO",
-            imagem: "/public/cidadao.png.PNG",
-            descricao:
-            "Encontre o assassino."
-        }
+    /* DETETIVE */
+    else if(role === "detetive"){
 
-    ];
+        roleTitle.innerText =
+            "DETETIVE";
 
-    // SORTEIA UMA CARTA
-    const randomRole =
-        roles[Math.floor(Math.random() * roles.length)];
+        roleDescription.innerText =
+            "Descubra quem é o assassino.";
 
-    // MOSTRA NOME
-    roleTitle.innerText =
-        randomRole.nome;
+        roleImage.src =
+            "/detetive.png";
+    }
 
-    // MOSTRA DESCRIÇÃO
-    roleDescription.innerText =
-        randomRole.descricao;
+    /* MÉDICO */
+    else if(role === "medico"){
 
-    // MOSTRA IMAGEM
-    roleImage.src =
-        randomRole.imagem;
-}
+        roleTitle.innerText =
+            "MÉDICO";
 
+        roleDescription.innerText =
+            "Salve um jogador por noite.";
+
+        roleImage.src =
+            "/medico.png";
+    }
+
+    /* CIDADÃO */
+    else{
+
+        roleTitle.innerText =
+            "CIDADÃO";
+
+        roleDescription.innerText =
+            "Encontre o assassino.";
+
+        roleImage.src =
+            "/cidadao.png";
+    }
+});
+
+/* FECHAR CARTA */
 function closeRole(){
 
     document.getElementById("roleScreen")
