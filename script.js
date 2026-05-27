@@ -132,7 +132,7 @@ function startGame(){
 
         {
             nome: "CIDADÃO",
-            imagem: "/public/cidadão.png.PNG",
+            imagem: "/public/cidadao.png.PNG",
             descricao:
             "Encontre o assassino."
         }
