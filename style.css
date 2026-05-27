@@ -25,9 +25,20 @@ padding:20px;
 text-align:center;
 }
 
-/* REMOVE TEXTO CIDADE DORME */
+/* REMOVE TEXTO */
 .logo{
 display:none;
+}
+
+/* MENU CENTRALIZADO */
+#menuScreen{
+
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+
+min-height:100vh;
 }
 
 /* IMAGEM CENTRAL */
@@ -36,11 +47,6 @@ width:320px;
 max-width:90%;
 margin:20px auto;
 display:block;
-}
-
-/* MENU MAIS EMBAIXO */
-#menuScreen{
-margin-top:320px;
 }
 
 /* CARTA */
@@ -88,6 +94,9 @@ transform:scale(1.03);
 /* BOTÕES PRINCIPAIS */
 .buttons{
 margin-top:20px;
+display:flex;
+flex-direction:column;
+align-items:center;
 }
 
 .buttons button:nth-child(1){
@@ -103,11 +112,6 @@ color:white;
 .start-btn{
 background:orange;
 color:white;
-}
-
-/* ESCONDER */
-.hidden{
-display:none;
 }
 
 /* PAINÉIS */
@@ -184,6 +188,41 @@ font-weight:bold;
 box-shadow:0 0 15px rgba(255,152,0,0.5);
 }
 
+/* TELA DE ESPERA */
+#waitingScreen{
+
+position:fixed;
+
+top:0;
+left:0;
+
+width:100%;
+height:100vh;
+
+display:flex;
+justify-content:center;
+align-items:center;
+
+z-index:9999;
+
+background:transparent;
+}
+
+/* IMAGEM ESPERA */
+.waiting-image{
+
+width:100%;
+max-width:500px;
+
+display:block;
+margin:auto;
+}
+
+/* ESCONDER */
+.hidden{
+display:none !important;
+}
+
 /* RESPONSIVO */
 @media(max-width:700px){
 
@@ -205,47 +244,10 @@ width:90%;
 
 input{
 width:90%;
-margin-top:20px;
 }
 
 .buttons{
-margin-top:20px;
-}
-
-#menuScreen{
-margin-top:300px;
-}
-
-}
-/* TELA DE ESPERA */
-#waitingScreen{
-
-position:fixed;
-top:0;
-left:0;
-
 width:100%;
-height:100vh;
-
-display:flex;
-justify-content:center;
-align-items:center;
-
-z-index:9999;
-background:transparent;
 }
 
-/* IMAGEM ESPERA */
-.waiting-image{
-
-width:100%;
-max-width:500px;
-
-display:block;
-margin:auto;
-}
-
-/* ESCONDER */
-.hidden{
-display:none !important;
 }
