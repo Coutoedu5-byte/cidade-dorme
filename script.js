@@ -97,12 +97,52 @@ function startGame(){
     document.getElementById("roleScreen")
         .classList.remove("hidden");
 
-    document.getElementById("roleTitle")
-        .innerText = "CIDADÃO";
+    // CARTAS
+    const roles = [
 
+        {
+            nome: "ASSASSINO",
+            imagem: "/assassino.png.PNG",
+            descricao: "Elimine todos sem ser descoberto."
+        },
+
+        {
+            nome: "DETETIVE",
+            imagem: "/detetive.png.PNG",
+            descricao: "Descubra quem é o assassino."
+        },
+
+        {
+            nome: "MÉDICO",
+            imagem: "/medico.png.PNG",
+            descricao: "Salve jogadores durante a noite."
+        },
+
+        {
+            nome: "CIDADÃO",
+            imagem: "/cidadão.png.PNG",
+            descricao: "Encontre o assassino."
+        }
+
+    ];
+
+    // SORTEIA CARTA
+    const randomRole =
+        roles[Math.floor(Math.random() * roles.length)];
+
+    // TÍTULO
+    document.getElementById("roleTitle")
+        .innerText = randomRole.nome;
+
+    // DESCRIÇÃO
     document.getElementById("roleDescription")
-        .innerText =
-            "Descubra quem é o assassino.";
+        .innerText = randomRole.descricao;
+
+    // IMAGEM
+    const roleImage =
+        document.getElementById("roleImage");
+
+    roleImage.src = randomRole.imagem;
 }
 
 function closeRole(){
