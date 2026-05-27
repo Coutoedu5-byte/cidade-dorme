@@ -40,12 +40,16 @@ display:none !important;
 /* MENU CENTRALIZADO */
 #menuScreen{
 
-display:flex;
 flex-direction:column;
 justify-content:center;
 align-items:center;
 
 min-height:100vh;
+}
+
+/* MENU VISÍVEL */
+#menuScreen:not(.hidden){
+display:flex;
 }
 
 /* IMAGEM CENTRAL */
@@ -214,7 +218,7 @@ z-index:9999;
 background:transparent;
 }
 
-/* MOSTRAR SOMENTE QUANDO NÃO ESTIVER HIDDEN */
+/* ESPERA VISÍVEL */
 #waitingScreen:not(.hidden){
 display:flex;
 }
