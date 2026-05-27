@@ -68,31 +68,21 @@ socket.on("roomCreated", (code) => {
 });
 
 /* ENTROU NA SALA */
-socket.on("roomJoined", () => {
+socket.on("roomJoined", (code) => {
+
+    roomCode = code;
 
     /* ESCONDE MENU */
     document.getElementById("menuScreen")
         .classList.add("hidden");
 
-    /* HOST */
-    if(isHost){
+    /* ESCONDE LOBBY */
+    document.getElementById("lobbyScreen")
+        .classList.add("hidden");
 
-        document.getElementById("waitingScreen")
-            .classList.add("hidden");
-
-        document.getElementById("lobbyScreen")
-            .classList.remove("hidden");
-    }
-
-    /* JOGADOR */
-    else{
-
-        document.getElementById("lobbyScreen")
-            .classList.add("hidden");
-
-        document.getElementById("waitingScreen")
-            .classList.remove("hidden");
-    }
+    /* MOSTRA ESPERA */
+    document.getElementById("waitingScreen")
+        .classList.remove("hidden");
 });
 
 /* ATUALIZA JOGADORES */
