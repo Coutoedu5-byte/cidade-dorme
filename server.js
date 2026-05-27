@@ -12,6 +12,7 @@ app.use(express.static(__dirname));
 
 const rooms = {};
 
+/* GERAR CÓDIGO */
 function generateCode(){
 
     return Math.random()
@@ -55,7 +56,7 @@ io.on("connection", (socket) => {
 
         socket.roomCode = code;
 
-        /* CRIOU SALA */
+        /* AVISA HOST */
         io.to(socket.id)
             .emit("roomCreated", code);
 
@@ -75,6 +76,10 @@ io.on("connection", (socket) => {
         playerName
     }) => {
 
+        roomCode =
+            roomCode.toUpperCase();
+
+        /* SALA NÃO EXISTE */
         if(!rooms[roomCode]){
 
             io.to(socket.id)
@@ -86,6 +91,7 @@ io.on("connection", (socket) => {
             return;
         }
 
+        /* ADICIONA JOGADOR */
         rooms[roomCode].players.push({
             id: socket.id,
             name: playerName
@@ -94,6 +100,10 @@ io.on("connection", (socket) => {
         socket.join(roomCode);
 
         socket.roomCode = roomCode;
+
+        /* AVISA O JOGADOR */
+        io.to(socket.id)
+            .emit("roomJoined");
 
         /* ATUALIZA TODOS */
         io.to(roomCode)
@@ -131,7 +141,7 @@ io.on("connection", (socket) => {
             return;
         }
 
-        /* CARGOS FIXOS */
+        /* CARGOS */
         const roles = [
 
             "assassino",
@@ -171,6 +181,7 @@ io.on("connection", (socket) => {
                     p => p.id !== socket.id
                 );
 
+            /* ATUALIZA */
             io.to(code)
                 .emit(
                     "updatePlayers",
@@ -178,6 +189,13 @@ io.on("connection", (socket) => {
                         p => p.name
                     )
                 );
+
+            /* REMOVE SALA VAZIA */
+            if(
+                rooms[code].players.length === 0
+            ){
+                delete rooms[code];
+            }
         }
     });
 
