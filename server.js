@@ -8,7 +8,7 @@ require("http").createServer(app);
 const io =
 require("socket.io")(http);
 
-app.use(express.static("public"));
+app.use(express.static(__dirname));
 
 const rooms = {};
 
