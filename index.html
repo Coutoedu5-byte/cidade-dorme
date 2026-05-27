@@ -1,8 +1,12 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
 <title>Cidade Dorme</title>
 
 <link rel="stylesheet" href="style.css">
@@ -61,6 +65,15 @@ onclick="startGame()">
 </button>
 
 </div>
+
+</div>
+
+<!-- TELA DE ESPERA -->
+<div id="waitingScreen" class="hidden">
+
+<img
+src="/public/waiting.png.PNG"
+class="waiting-image">
 
 </div>
 
@@ -138,6 +151,7 @@ Agora você é apenas um espectador.
 </div>
 
 <script src="/socket.io/socket.io.js"></script>
+
 <script src="script.js"></script>
 
 </body>
