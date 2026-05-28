@@ -10,22 +10,16 @@ const menuScreen =
 const lobbyScreen =
     document.getElementById("lobbyScreen");
 
-const waitingScreen =
-    document.getElementById("waitingScreen");
-
 const roleScreen =
     document.getElementById("roleScreen");
 
 /* MOSTRAR TELA */
 function showScreen(screen){
 
-    /* ESCONDE TODAS */
     menuScreen.classList.add("hidden");
     lobbyScreen.classList.add("hidden");
-    waitingScreen.classList.add("hidden");
     roleScreen.classList.add("hidden");
 
-    /* MOSTRA A CERTA */
     screen.classList.remove("hidden");
 }
 
@@ -87,7 +81,10 @@ socket.on("roomJoined", (code) => {
 
     roomCode = code;
 
-    showScreen(waitingScreen);
+    document.getElementById("roomCode")
+        .innerText = code;
+
+    showScreen(lobbyScreen);
 });
 
 /* ATUALIZA JOGADORES */
@@ -135,7 +132,6 @@ socket.on("receiveRole", (role) => {
     const roleImage =
         document.getElementById("roleImage");
 
-    /* ASSASSINO */
     if(role === "assassino"){
 
         roleTitle.innerText =
@@ -148,7 +144,6 @@ socket.on("receiveRole", (role) => {
             "/assassino.png.PNG";
     }
 
-    /* DETETIVE */
     else if(role === "detetive"){
 
         roleTitle.innerText =
@@ -161,7 +156,6 @@ socket.on("receiveRole", (role) => {
             "/detetive.png.PNG";
     }
 
-    /* MÉDICO */
     else if(role === "medico"){
 
         roleTitle.innerText =
@@ -174,7 +168,6 @@ socket.on("receiveRole", (role) => {
             "/medico.png.PNG";
     }
 
-    /* CIDADÃO */
     else{
 
         roleTitle.innerText =
