@@ -145,7 +145,7 @@ socket.on("receiveRole", (role) => {
             "Elimine todos sem ser descoberto.";
 
         roleImage.src =
-            "/public/assassino.png.PNG";
+            "/assassino.png.PNG";
     }
 
     /* DETETIVE */
@@ -158,7 +158,7 @@ socket.on("receiveRole", (role) => {
             "Descubra quem é o assassino.";
 
         roleImage.src =
-            "/public/detetive.png.PNG";
+            "/detetive.png.PNG";
     }
 
     /* MÉDICO */
@@ -171,7 +171,7 @@ socket.on("receiveRole", (role) => {
             "Salve um jogador por noite.";
 
         roleImage.src =
-            "/public/medico.png.PNG";
+            "/medico.png.PNG";
     }
 
     /* CIDADÃO */
@@ -184,7 +184,7 @@ socket.on("receiveRole", (role) => {
             "Encontre o assassino.";
 
         roleImage.src =
-            "/public/cidadao.png.PNG";
+            "/cidadao.png.PNG";
     }
 });
 
