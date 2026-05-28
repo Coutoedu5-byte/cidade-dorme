@@ -1,155 +1,29 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
+<div class="home-screen">
 
-<head>
+    <div class="menu-container">
 
-<meta charset="UTF-8">
+        <img src="logo.png" class="logo">
 
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
+        <div class="input-wrapper">
+            <i>👤</i>
 
-<title>Cidade Dorme</title>
+            <input
+                type="text"
+                class="player-input"
+                placeholder="Nome do jogador"
+            >
+        </div>
 
-<link rel="stylesheet" href="style.css">
+        <button class="game-button create-room">
+            <span>👥</span>
+            Criar Sala
+        </button>
 
-</head>
+        <button class="game-button join-room">
+            <span>🚪</span>
+            Entrar Sala
+        </button>
 
-<body>
-
-<div class="background"></div>
-
-<div class="container">
-
-<!-- MENU -->
-<div id="menuScreen">
-
-<img
-src="/logo.png.PNG"
-class="main-image">
-
-<input
-id="playerName"
-placeholder="Nome do jogador">
-
-<div class="buttons">
-
-<button onclick="createRoom()">
-Criar Sala
-</button>
-
-<button onclick="joinRoom()">
-Entrar Sala
-</button>
+    </div>
 
 </div>
-
-</div>
-
-<!-- LOBBY DO HOST -->
-<div id="lobbyScreen" class="hidden">
-
-<h2>
-Sala:
-<span id="roomCode"></span>
-</h2>
-
-<div class="panel">
-
-<h3>Jogadores</h3>
-
-<ul id="players"></ul>
-
-<button
-id="startGameBtn"
-class="start-btn"
-onclick="startGame()">
-
-▶ INICIAR PARTIDA
-
-</button>
-
-</div>
-
-</div>
-
-<!-- CARTA -->
-<div id="roleScreen" class="hidden">
-
-<h1 id="roleTitle"></h1>
-
-<img
-id="roleImage"
-class="role-image"
-src=""
-alt="Carta do jogador">
-
-<p id="roleDescription"></p>
-
-<button onclick="closeRole()">
-Continuar
-</button>
-
-</div>
-
-<!-- NOITE -->
-<div id="nightScreen" class="hidden">
-
-<h1>A CIDADE DORME...</h1>
-
-<p>Use sua habilidade.</p>
-
-<div id="nightActions"></div>
-
-</div>
-
-<!-- DIA -->
-<div id="dayScreen" class="hidden">
-
-<h1>DISCUSSÃO</h1>
-
-<div id="votePlayers"></div>
-
-<div class="chat-box">
-
-<div id="messages"></div>
-
-<input
-id="messageInput"
-placeholder="Mensagem">
-
-<button onclick="sendMessage()">
-Enviar
-</button>
-
-</div>
-
-</div>
-
-<!-- ELIMINADO -->
-<div id="eliminatedScreen" class="hidden">
-
-<h1>VOCÊ FOI ELIMINADO</h1>
-
-<p>
-Agora você é apenas um espectador.
-</p>
-
-</div>
-
-<!-- VENCEDOR -->
-<div id="winnerScreen" class="hidden">
-
-<h1 id="winnerText"></h1>
-
-</div>
-
-</div>
-
-
-<script src="/socket.io/socket.io.js"></script>
-
-<script src="script.js"></script>
-
-</body>
-
-</html>
