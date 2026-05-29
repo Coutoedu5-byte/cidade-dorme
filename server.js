@@ -1,33 +1,29 @@
 /*
-Servidor Unificado Cidade Dorme (Socket.io + Express)
-Hospeda o jogo visual e sincroniza os celulares em tempo real.
+Servidor Privado Cidade Dorme para Websim
+Apenas gerencia as salas, chat e votos via Socket.io.
 */
 
 import express from 'express';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
 
 const app = express();
 const server = createServer(app);
+
+// Configuração de CORS vital para o Websim conseguir se conectar de fora
 const io = new Server(server, {
-  cors: { origin: "*" }
+  cors: {
+    origin: "*", // Permite que o Websim acesse o servidor
+    methods: ["GET", "POST"]
+  }
 });
-
-const PORT = process.env.PORT || 3000;
-
-// Entrega os arquivos visuais automaticamente
-app.use(express.static(__dirname));
 
 const GLOBAL_ROOMS = {};
 
 io.on('connection', (socket) => {
-  console.log('Novo dispositivo conectado:', socket.id);
+  console.log('Websim se conectou:', socket.id);
 
+  // Quando um jogador entra ou cria uma sala pelo Websim
   socket.on('room:join', ({ roomId, player }) => {
     if (!roomId || !player) return;
     
@@ -52,9 +48,10 @@ io.on('connection', (socket) => {
       room.players.push(player);
     }
 
-    console.log(`Jogador ${player.name} entrou na sala ${roomId}`);
+    // Atualiza a sala no Websim
     io.to(roomId).emit('room:update', room);
     
+    // Envia o evento de sincronização
     io.to(roomId).emit('game:event:relay', {
       type: 'sync:event',
       name: 'room:join',
@@ -63,22 +60,19 @@ io.on('connection', (socket) => {
     });
   });
 
+  // Escuta o chat e ações vindas do Websim e retransmite
   socket.on('game:event', (payload) => {
     if (!payload || !payload.detail || !payload.detail.roomId) return;
     const roomId = payload.detail.roomId;
 
     if (GLOBAL_ROOMS[roomId]) {
       const room = GLOBAL_ROOMS[roomId];
-      
       if (payload.name === 'lobby:chat' && payload.detail.message) {
         room.chat.push(payload.detail.message);
       }
-      if (payload.name === 'lobby:start') {
-        room.started = true;
-      }
     }
 
-    // Retransmite a jogada ou mensagem para todos da sala
+    // Retransmite para os outros jogadores no Websim
     socket.to(roomId).emit('game:event:relay', payload);
   });
 
@@ -101,6 +95,7 @@ io.on('connection', (socket) => {
   });
 });
 
+const PORT = process.env.PORT || 3000;
 server.listen(PORT, '0.0.0.0', () => {
-  console.log(`Servidor rodando com sucesso na porta ${PORT}`);
+  console.log(`Servidor do Websim rodando na porta ${PORT}`);
 });
